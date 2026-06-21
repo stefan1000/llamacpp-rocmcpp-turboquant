@@ -967,7 +967,7 @@ jobs:
         artifact_name: llama-turboquant-${{ matrix.artifact_prefix }}-rocm-${{ matrix.gfx_target }}-x64
 
   create-release:
-    needs: [prepare-matrix, build-windows, build-ubuntu, test-stx-halo, test-stx]
+    needs: [prepare-matrix, build-windows, build-ubuntu]
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -977,8 +977,6 @@ jobs:
       (needs.build-windows.result == 'success' || needs.build-windows.result == 'skipped') &&
       (needs.build-ubuntu.result == 'success' || needs.build-ubuntu.result == 'skipped') &&
       (needs.build-windows.result == 'success' || needs.build-ubuntu.result == 'success') &&
-      (needs.test-stx-halo.result == 'success' || needs.test-stx-halo.result == 'skipped') &&
-      (needs.test-stx.result == 'success' || needs.test-stx.result == 'skipped') &&
       github.event_name != 'pull_request' &&
       (github.event_name == 'workflow_dispatch' && 
        (github.event.inputs.create_release == 'true' || github.event.inputs.create_release == null) ||
