@@ -996,7 +996,7 @@ jobs:
     - name: Generate release tag
       id: generate-tag
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         # Get all existing release tags that match the pattern b####
         existing_tags=$(gh release list --limit 1000 --json tagName --jq '.[].tagName' | grep -E '^b[0-9]{4}$' | sort -V || echo "")
@@ -1082,7 +1082,7 @@ jobs:
     - name: Create Release
       if: steps.check-tag.outputs.tag_exists == 'false'
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         TAG="${{ steps.generate-tag.outputs.tag }}"
         # Get ROCm version from either Windows or Ubuntu build (whichever succeeded)
@@ -1127,8 +1127,8 @@ jobs:
         **Operating System(s)**: $operating_systems
         **GPU Target(s)**: $targets
         **ROCm Version**: $ROCM_VERSION
-        **Llama.cpp Commit Hash**: $LLAMACPP_COMMIT_HASH
+        **Llama.cpp Commit Hash**: $LLAMACPP_COMMIT_HASH 
         **Build Date**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
 
-        This release includes compiled llama.cpp binaries with ROCm support for multiple GPU targets and operating systems, with all essential ROCm runtime libraries included." \
+        This release includes compiled llama.cpp binaries from TheTom turboquant fork with ROCm support for multiple GPU targets and operating systems, with all essential ROCm runtime libraries included." \
           $upload_files
