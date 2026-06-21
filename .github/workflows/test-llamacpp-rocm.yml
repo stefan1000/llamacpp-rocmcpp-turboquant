@@ -359,10 +359,10 @@ jobs:
         fi
         
         echo "Running llama-cli test..."
-        echo "Command: $llama_cli_path -m \"$model_path\" -ngl 99 -p \"I believe the meaning of life is\" -st"
+        echo "Command: $llama_cli_path -m \"$model_path\" --cache-type-k f16 --cache-type-v turbo4 -ngl 99 -p \"I believe the meaning of life is\" -st"
         
         # Run the command and capture output
-        output=$("$llama_cli_path" -m "$model_path" -ngl 99 -p "I believe the meaning of life is" -st 2>&1)
+        output=$("$llama_cli_path" -m "$model_path" --cache-type-k f16 --cache-type-v turbo4 -ngl 99 -p "I believe the meaning of life is" -st 2>&1)
         
         echo "=== LLAMA-CLI OUTPUT ==="
         echo "$output"
