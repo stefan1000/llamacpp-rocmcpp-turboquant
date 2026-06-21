@@ -3,9 +3,9 @@
   <img src="https://img.shields.io/badge/🦙Powered%20TheTom llama-cpp-turboquant?logo=llama&logoColor=white" alt="TheTom llama-cpp-turboquant" />
 </a>
 
-Fork from  [**🍋 llamacpp-rocm**](https://github.com/lemonade-sdk/llamacpp-rocm) but based on [TheTom/llama-cpp-turboquant](https://github.com/TheTom/llama-cpp-turboquant) to get fresh builds for AMD ROCm boards.
+Fork from  [**🍋 llamacpp-rocm**](https://github.com/lemonade-sdk/llamacpp-rocm) but based on [TheTom/llama-cpp-turboquant](https://github.com/TheTom/llama-cpp-turboquant) to get regular builds for AMD ROCm boards.
 
-
+Frequency set to weekly for now (every saturday).
 
 
 # llamacpp-rocm
