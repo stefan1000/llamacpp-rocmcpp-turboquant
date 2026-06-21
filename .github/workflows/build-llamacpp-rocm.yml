@@ -251,10 +251,10 @@ jobs:
         $llamacppVersion = "${{ env.LLAMACPP_VERSION }}"
         if ($llamacppVersion -eq "latest") {
           Write-Host "Cloning master branch (latest) with shallow clone"
-          git clone --depth 1 --single-branch --branch master https://github.com/ggerganov/llama.cpp.git
+          git clone --depth 1 --single-branch https://github.com/TheTom/llama-cpp-turboquant.git
         } else {
           Write-Host "Cloning llama.cpp version: $llamacppVersion with shallow clone"
-          git clone --depth 1 --single-branch --branch $llamacppVersion https://github.com/ggerganov/llama.cpp.git
+          git clone --depth 1 --single-branch --branch $llamacppVersion https://github.com/TheTom/llama-cpp-turboquant.git
         }
         cd llama.cpp
         
