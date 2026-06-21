@@ -30,9 +30,9 @@ on:
 
   # Trigger on a schedule to build nightly releases
   schedule:
-    # Runs at 1:00 PM UTC, which is 5:00 AM PST (UTC-8)
+    # Runs at 1:00 PM UTC, which is 5:00 AM PST (UTC-8), every saturday
     # This is two hours after the ROCm nightly tarball is triggered
-    - cron: '0 13 * * *'
+    - cron: '0 13 * * 6'
 
 env:
   OPERATING_SYSTEMS: ${{ github.event.inputs.operating_systems || 'windows,ubuntu' }}
