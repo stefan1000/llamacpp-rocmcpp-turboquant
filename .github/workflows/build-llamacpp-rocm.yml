@@ -1103,7 +1103,7 @@ jobs:
           for target in "${TARGET_ARRAY[@]}"; do
             target=$(echo "$target" | xargs) # trim whitespace
             
-            final_archive_name="llama-${TAG}-${os}-rocm-${target}-x64"
+            final_archive_name="llama-turboquant-${TAG}-${os}-rocm-${target}-x64"
             if [ -f "${final_archive_name}.zip" ]; then
               upload_files="${upload_files} ${final_archive_name}.zip"
             fi
