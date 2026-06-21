@@ -106,7 +106,10 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
+    - name: Disable Windows Defender real-time scanning
+      run: Set-MpPreference -DisableRealtimeMonitoring $true
+  
     - name: Clean up existing directories (safety precaution)
       run: |
         # Remove existing llama.cpp directory if it exists
@@ -136,7 +139,8 @@ jobs:
         $vsInstallerPath = "$env:TEMP\vs_buildtools.exe"
         
         Write-Host "Downloading Visual Studio Build Tools..."
-        Invoke-WebRequest -Uri $vsInstallerUrl -OutFile $vsInstallerPath
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest -Uri $vsInstallerUrl -OutFile $vsInstallerPath -TimeoutSec 600
         
         Write-Host "Installing Visual Studio Build Tools..."
         Start-Process -FilePath $vsInstallerPath -ArgumentList "--quiet", "--wait", "--norestart", "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64", "--add", "Microsoft.VisualStudio.Component.VC.CMake.Project", "--add", "Microsoft.VisualStudio.Component.VC.ATL", "--add", "Microsoft.VisualStudio.Component.Windows11SDK.22621" -Wait
@@ -154,14 +158,16 @@ jobs:
         $ninjaPath = "$env:TEMP\ninja-win.zip"
         $ninjaDir = "C:\ninja"
         New-Item -ItemType Directory -Force -Path $ninjaDir
-        Invoke-WebRequest -Uri $ninjaUrl -OutFile $ninjaPath
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest -Uri $ninjaUrl -OutFile $ninjaPath -TimeoutSec 600
         Expand-Archive -Path $ninjaPath -DestinationPath $ninjaDir -Force
         
         # Install Strawberry Perl
         Write-Host "Installing Strawberry Perl..."
         $perlUrl = "http://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-64bit.msi"
         $perlPath = "$env:TEMP\strawberry-perl-5.32.1.1-64bit.msi"
-        Invoke-WebRequest -Uri $perlUrl -OutFile $perlPath
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest -Uri $perlUrl -OutFile $perlPath -TimeoutSec 600
         Start-Process msiexec.exe -ArgumentList "/i $perlPath /quiet /norestart" -Wait
         
         # Verify installations
@@ -190,6 +196,7 @@ jobs:
         
         if ($rocmVersion -eq "latest") {
           Write-Host "Auto-detecting latest ROCm version for target: $currentTarget"
+          $ProgressPreference = 'SilentlyContinue'
           $s3Response = (Invoke-WebRequest "https://therock-nightly-tarball.s3.amazonaws.com/?prefix=therock-dist-windows-$s3Target-7").Content
           $files = $s3Response -split '<Key>' | Where-Object {$_ -match '</Key>'} | ForEach-Object { ($_ -split '</Key>')[0] }
           
@@ -236,6 +243,7 @@ jobs:
         echo "DETECTED_ROCM_VERSION=$rocmVersion" >> $env:GITHUB_ENV
         
         Write-Host "Downloading ROCm from: $rocmUrl"
+        $ProgressPreference = 'SilentlyContinue'
         Invoke-WebRequest -Uri $rocmUrl -OutFile "rocm.tar.gz"
         
     - name: Extract ROCm to C:\opt\rocm
@@ -309,7 +317,7 @@ jobs:
         cmake .. -G Ninja ^
           -DCMAKE_C_COMPILER="C:\opt\rocm\lib\llvm\bin\clang.exe" ^
           -DCMAKE_CXX_COMPILER="C:\opt\rocm\lib\llvm\bin\clang++.exe" ^
-          -DCMAKE_CXX_FLAGS="-IC:\opt\rocm\include -Wno-ignored-attributes" ^
+          -DCMAKE_CXX_FLAGS="-IC:\opt\rocm\include -Wno-ignored-attributes -Wunused-parameter -Wnested-anon-types -Wunreachable-code-break -Wsign-compare -Wmissing-noreturn" ^
           -DCMAKE_CROSSCOMPILING=ON ^
           -DCMAKE_BUILD_TYPE=Release ^
           -DGPU_TARGETS="%mapped_target%" ^
