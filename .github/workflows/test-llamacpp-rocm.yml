@@ -119,7 +119,7 @@ jobs:
       run: |
         $releaseTag = "${{ needs.prepare-matrix.outputs.latest_release_tag }}"
         $target = "${{ matrix.gfx_target }}"
-        $assetName = "llama-${releaseTag}-windows-rocm-${target}-x64.zip"
+        $assetName = "llama-turboquant-${releaseTag}-windows-rocm-${target}-x64.zip"
         $repo = "${{ github.repository }}"
         
         Write-Host "Downloading release asset: $assetName"
@@ -272,7 +272,7 @@ jobs:
       run: |
         release_tag="${{ needs.prepare-matrix.outputs.latest_release_tag }}"
         target="${{ matrix.gfx_target }}"
-        asset_name="llama-${release_tag}-ubuntu-rocm-${target}-x64.zip"
+        asset_name="llama-turboquant-${release_tag}-ubuntu-rocm-${target}-x64.zip"
         repo="${{ github.repository }}"
         
         echo "Downloading release asset: $asset_name"
